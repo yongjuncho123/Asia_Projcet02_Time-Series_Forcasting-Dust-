@@ -18,57 +18,22 @@ unpre_dust.isna().sum()
 unpre_dust.describe()
 
 # 강남구만 뽑기
-unpre_GN = unpre_dust[unpre_dust['구분'] == '강남구']
-print(unpre_GN)
-unpre_GN.isna().sum()
-unpre_GN = unpre_GN.loc[::-1]
-print(unpre_GN)
+unpre_GS = unpre_dust[unpre_dust['구분'] == '강서구']
+print(unpre_GS)
+unpre_GS.isna().sum()
+unpre_GS = unpre_GS.loc[::-1]
+print(unpre_GS)
 
 # 전처리
-unpre_GN['일시'] = pd.to_datetime(unpre_GN['일시'])
-unpre_GN.set_index('일시', inplace=True)
-print(unpre_GN)
+unpre_GS['일시'] = pd.to_datetime(unpre_GS['일시'])
+unpre_GS.set_index('일시', inplace=True)
+print(unpre_GS)
 
 
 
-while unpre_GN['미세먼지(PM10)'].isna().sum() and unpre_GN['초미세먼지(PM25)'].isna().sum() != 0:
-    unpre_GN[['미세먼지(PM10)', '초미세먼지(PM25)']] = unpre_GN[['미세먼지(PM10)', '초미세먼지(PM25)']].fillna(unpre_GN[['미세먼지(PM10)', '초미세먼지(PM25)']].rolling('3H', min_periods=1).mean())
+while unpre_GS['미세먼지(PM10)'].isna().sum() and unpre_GS['초미세먼지(PM25)'].isna().sum() != 0:
+    unpre_GS[['미세먼지(PM10)', '초미세먼지(PM25)']] = unpre_GS[['미세먼지(PM10)', '초미세먼지(PM25)']].fillna(unpre_GS[['미세먼지(PM10)', '초미세먼지(PM25)']].rolling('3H', min_periods=1).mean())
 
-unpre_GN.isna().sum()
+unpre_GS[unpre_GS['미세먼지(PM10)'].isnull()]
 
-unpre_GN.to_csv('./DATA/cleaned/pre_GN.csv')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import pandas as pd
-import numpy as np
-
-# Create a sample dataframe
-df = pd.DataFrame({'date': ['2023-02-14 00:00:00', '2023-02-14 01:00:00', '2023-02-14 02:00:00', '2023-02-14 03:00:00'],
-                   'value1': [10, 20, 30, 40],
-                   'value2': [5, np.nan, 8, np.nan],
-                   'value3': [15, 25, 35, 45],
-                   'value4': [12, np.nan, 18, np.nan]})
-
-# Convert the date column to a datetime data type
-df['date'] = pd.to_datetime(df['date'])
-
-# Set the date column as the dataframe index
-df.set_index('date', inplace=True)
-
-# Fill missing values with the average of the past three hours
-df[['value2', 'value4']] = df[['value2', 'value4']].fillna(df[['value2', 'value4']].rolling('3H', min_periods=1).mean())
-
-print(df)
+unpre_GS.to_csv('./DATA/cleaned/pre_GS.csv')
